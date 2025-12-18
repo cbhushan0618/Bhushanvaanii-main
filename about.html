@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Chandraवाणी</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.1/css/flag-icons.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #111827; /* gray-900 */
+            color: #d1d5db; /* gray-300 */
+        }
+    </style>
+</head>
+<body class="antialiased background-gradient flex flex-col min-h-screen">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <header class="mb-6 md:mb-8 pb-4 pt-4 rounded-b-lg bg-gray-800/30 backdrop-blur-sm shadow-md border-b border-gray-700/50">
+             <!-- Logo -->
+             <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-4 text-gray-100">
+                 <span class="text-teal-400">Chandra</span><span class="text-orange-400">वाणी</span>
+             </h1>
+            <!-- Navigation -->
+            <nav>
+                 <ul class="flex justify-center space-x-4 sm:space-x-6 md:space-x-8 p-2">
+                    <li><a href="index.html" class="text-gray-300 hover:text-white font-medium pb-1 border-b-2 border-transparent hover:border-gray-300 transition duration-200">Home</a></li>
+                    <li><a href="about.html" class="text-teal-400 hover:text-teal-300 font-medium pb-1 border-b-2 border-teal-400">About Us</a></li>
+                    <li><a href="contact.html" class="text-gray-300 hover:text-white font-medium pb-1 border-b-2 border-transparent hover:border-gray-300 transition duration-200">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-gray-800/60 backdrop-blur-sm p-6 rounded-lg shadow-md border border-gray-700/60">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-100">About Chandraवाणी</h2>
+            <p class="mb-4 text-gray-300">
+                Welcome to Chandraवाणी, your gateway to the world of internet radio! Our mission is to provide a simple, elegant, and reliable platform for discovering and listening to live radio stations from across the globe.
+            </p>
+            <p class="mb-4 text-gray-300">
+                Powered by the extensive <a href="https://www.radio-browser.info/" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline">Radio Browser API</a>, we offer access to thousands of stations covering a vast range of genres, countries, and languages.
+            </p>
+            <p class="text-gray-300">
+                Whether you're looking for the latest hits, classical masterpieces, relaxing ambient sounds, or news from your home country, Chandraवाणी aims to connect you to the sounds you love.
+            </p>
+        </main>
+    </div>
+
+    <footer class="text-center text-sm text-gray-500 py-6 mt-8 border-t border-gray-700/50">
+        <div>
+             &copy; <span id="current-year"></span> Chandraवाणी. All rights reserved.
+        </div>
+     </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 

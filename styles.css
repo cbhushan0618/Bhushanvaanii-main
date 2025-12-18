@@ -1,0 +1,639 @@
+/* Custom CSS styles can go here */
+
+/* === Radio Player Styles === */
+
+/* --- Base Setup & Background --- */
+:root {
+    --dark-bg: #111827; /* gray-900 */
+    --card-bg: #1f2937; /* gray-800 */
+    --border-color: #374151; /* gray-700 */
+    --border-color-light: #4b5563; /* gray-600 */
+    --text-color: #d1d5db; /* gray-300 */
+    --text-muted: #9ca3af; /* gray-400 */
+    --primary-color: #6366f1; /* indigo-500 */
+    --primary-color-light: #818cf8; /* indigo-400 */
+    /* Subtle Background Pattern - by Steve Schoger */
+    --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23374151' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+    /* Default background */
+    background: var(--dark-bg);
+    transition: background 0.8s ease-in-out; /* Smooth transition for background changes */
+    /* Apply background pattern */
+    background-image: var(--bg-pattern);
+}
+
+.background-gradient {
+    /* Original subtle radial gradient at top */
+    background: radial-gradient(ellipse at top, #2c3e50 0%, var(--dark-bg) 70%);
+}
+
+/* Dynamic Background Theme Classes */
+.bg-theme-default {
+    background: radial-gradient(ellipse at top, #2c3e50 0%, var(--dark-bg) 70%);
+}
+
+.bg-theme-chill {
+    background: radial-gradient(ellipse at top, #1e3a8a 0%, #111827 70%); /* blue-900 to gray-900 */
+}
+
+.bg-theme-workout {
+    background: radial-gradient(ellipse at top, #7e22ce 0%, #111827 70%); /* purple-700 to gray-900 */
+}
+
+.bg-theme-focus {
+    background: radial-gradient(ellipse at top, #047857 0%, #111827 70%); /* emerald-700 to gray-900 */
+}
+
+.bg-theme-party {
+    background: radial-gradient(ellipse at top, #be185d 0%, #111827 70%); /* pink-700 to gray-900 */
+}
+
+.bg-theme-jazz {
+     background: radial-gradient(ellipse at top, #854d0e 0%, #111827 70%); /* amber-800 to gray-900 */
+}
+
+.bg-theme-classical {
+     background: radial-gradient(ellipse at top, #4a044e 0%, #111827 70%); /* fuchsia-900 to gray-900 */
+}
+
+/* --- Icon Styling --- */
+[class^="heroicon-"] {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  vertical-align: middle;
+  display: inline-block;
+}
+h2 [class^="heroicon-"] {
+    margin-right: 0.5rem; /* Add space after header icons */
+}
+.station-card .icon-label [class^="heroicon-"] {
+    width: 0.875rem; /* w-3.5 */
+    height: 0.875rem; /* h-3.5 */
+    margin-right: 0.375rem; /* mr-1.5 */
+    color: var(--text-muted);
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- Skeleton Loader --- */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.skeleton {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    background-color: var(--border-color); /* Use border color for skeleton */
+    border-radius: 0.375rem; /* rounded-md */
+}
+.skeleton-card {
+    background-color: var(--card-bg);
+    padding: 1rem;
+    border-radius: 0.5rem; /* rounded-lg */
+    border: 1px solid var(--border-color);
+}
+
+/* --- Station Card Styling --- */
+.station-card {
+    background-color: rgba(31, 41, 55, 0.8); /* gray-800 with transparency */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0; /* Start hidden for animation */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+}
+.station-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--border-color-light);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+.station-card h3 {
+    color: #f9fafb; /* gray-50 */
+}
+/* Non-clickable card */
+.station-card[style*="cursor: not-allowed"] {
+    filter: grayscale(50%);
+}
+.station-card[style*="cursor: not-allowed"]:hover {
+    transform: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+    border-color: var(--border-color);
+}
+
+/* Style for the currently playing station card */
+.playing {
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3), 0 8px 12px rgba(0, 0, 0, 0.3);
+}
+/* Add subtle animation to playing icon */
+.player-playing-icon {
+     animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* --- Player Styling --- */
+#player {
+    /* background, blur, border set via tailwind - classes already updated */
+    transition: box-shadow 0.3s ease;
+}
+.playing #player {
+     /* Enhance shadow slightly when playing */
+     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+.audio-player-custom {
+     border-radius: 0.375rem;
+     border: 1px solid var(--border-color);
+     height: 40px;
+     /* More robust filter for dark theme */
+     filter: invert(95%) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+     background-color: #374151;
+     padding: 0 5px;
+}
+
+/* --- Buttons (Genre & Pagination) --- */
+#genre-tags button,
+#pagination button {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px; /* rounded-full */
+    padding: 0.3rem 0.8rem;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+#genre-tags button:hover,
+#pagination button:hover:not([disabled]) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Pagination Active/Disabled */
+#pagination button.active {
+     background-color: var(--primary-color);
+     color: white;
+     border-color: var(--primary-color);
+     box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+     cursor: default;
+     opacity: 0.9;
+}
+
+#pagination button:disabled {
+    background-color: #374151; /* gray-700 */
+    color: #6b7280; /* gray-500 */
+    border-color: #4b5563; /* gray-600 */
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+#pagination span {
+    color: var(--text-muted);
+    padding: 0.3rem 0.5rem;
+}
+
+/* --- Mood Buttons --- */
+.mood-button {
+    background-color: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem; /* rounded-md */
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.mood-button:hover {
+    background-color: #374151; /* gray-700 */
+    color: var(--text-color);
+    border-color: var(--border-color-light);
+    transform: scale(1.03);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mood-button.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+    font-weight: 600;
+}
+
+/* --- Forms --- */
+#search-filters input,
+#search-filters select {
+    /* Base styles already set via Tailwind */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+#search-filters input:focus,
+#search-filters select:focus {
+     /* Focus ring set via Tailwind */
+     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* --- Error Styling --- */
+#error-container {
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+}
+
+/* Neon Glow Effects */
+.neon-text-glow-cyan {
+    text-shadow: 0 0 5px rgba(34, 211, 238, 0.5), 0 0 10px rgba(34, 211, 238, 0.4), 0 0 15px rgba(34, 211, 238, 0.3);
+}
+.neon-text-glow-pink {
+    text-shadow: 0 0 5px rgba(236, 72, 153, 0.5), 0 0 10px rgba(236, 72, 153, 0.4), 0 0 15px rgba(236, 72, 153, 0.3);
+}
+.neon-text-glow-purple {
+     text-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.4), 0 0 15px rgba(168, 85, 247, 0.3);
+}
+.neon-text-glow-header {
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.3), 0 0 12px rgba(236, 72, 153, 0.3), 0 0 16px rgba(168, 85, 247, 0.2);
+}
+
+.neon-button {
+    transition: all 0.3s ease;
+}
+.neon-button.neon-cyan {
+     box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), inset 0 0 5px rgba(34, 211, 238, 0.5);
+}
+.neon-button.neon-cyan:hover {
+     box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), inset 0 0 8px rgba(34, 211, 238, 0.7);
+}
+.neon-button.neon-pink {
+     box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), inset 0 0 5px rgba(236, 72, 153, 0.5);
+}
+.neon-button.neon-pink:hover {
+     box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), inset 0 0 8px rgba(236, 72, 153, 0.7);
+}
+
+.neon-border-glow {
+    border: 1px solid rgba(55, 65, 81, 0.5); /* gray-700/50 */
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.2), 0 0 15px rgba(34, 211, 238, 0.1);
+}
+.neon-border-glow-cyan {
+     border: 1px solid rgba(34, 211, 238, 0.3);
+     box-shadow: 0 0 10px rgba(34, 211, 238, 0.3), 0 0 15px rgba(34, 211, 238, 0.2);
+}
+
+/* Focus Glow */
+.neon-input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2), 0 0 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Example: Style for broken image placeholders (using the SVG now, but keeping CSS rule might be useful) */
+/* img[alt]:after {
+    content: attr(alt);
+    display: block;
+    position: absolute;
+    inset: 0;
+    background-color: #e5e7eb; 
+    color: #6b7280; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem; 
+    text-align: center;
+    padding: 0.5rem;
+} */
+
+/* Basic Favicon Placeholder Style */
+img[src$=".svg"] { /* Target our placeholder SVG */
+    padding: 0.5rem; /* Add some padding so the icon isn't edge-to-edge */
+    filter: grayscale(1);
+    opacity: 0.6;
+}
+
+/* Hide default audio player controls pseudo-elements if needed for custom styling */
+/* audio::-webkit-media-controls-panel {
+    background-color: transparent;
+} */
+
+/* General Body Style */
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    /* Font already applied via inline style in HTML */
+    scroll-behavior: smooth;
+}
+
+/* --- Icon Styling --- */
+/* Default icon size and color (can be overridden by Tailwind classes) */
+[class^="heroicon-"] {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  vertical-align: middle; /* Align with text */
+  display: inline-block; /* Ensure proper spacing */
+}
+
+/* Style icons within specific elements */
+h2 [class^="heroicon-"] {
+    color: inherit; /* Inherit color from heading */
+    filter: drop-shadow(0 0 3px currentColor); /* Simple glow based on text color */
+}
+
+button [class^="heroicon-"] {
+    /* Size already set via Tailwind */
+}
+
+a [class^="heroicon-"] {
+     color: inherit; /* Inherit color from link */
+     filter: drop-shadow(0 0 3px currentColor);
+}
+
+/* Style icons on cards */
+.station-card .icon-label svg {
+    width: 0.875rem; /* w-3.5 */
+    height: 0.875rem; /* h-3.5 */
+    margin-right: 0.25rem; /* mr-1 */
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulseNeonBorder {
+  0% { border-color: rgba(34, 211, 238, 0.5); box-shadow: 0 0 8px rgba(34, 211, 238, 0.3), 0 0 10px rgba(34, 211, 238, 0.2); }
+  50% { border-color: rgba(34, 211, 238, 1); box-shadow: 0 0 15px rgba(34, 211, 238, 0.5), 0 0 20px rgba(34, 211, 238, 0.4); }
+  100% { border-color: rgba(34, 211, 238, 0.5); box-shadow: 0 0 8px rgba(34, 211, 238, 0.3), 0 0 10px rgba(34, 211, 238, 0.2); }
+}
+
+/* Add fade-in animation to cards */
+.station-card {
+    background-color: rgba(31, 41, 55, 0.7); /* card-bg with slight transparency */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid transparent; /* Start transparent */
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0; /* Start hidden for animation */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-radius: 0.5rem; /* rounded-lg */
+}
+
+/* Apply animation with delay based on index (handled by JS if needed) */
+/* .station-card:nth-child(1) { animation-delay: 0.05s; } */
+/* ... etc ... */
+
+/* --- Skeleton Loader --- */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+.skeleton {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    background-color: #374151; /* gray-700 */
+    border-radius: 0.375rem; /* rounded-md */
+}
+
+.skeleton-card {
+    background-color: var(--card-bg); /* Use variable */
+    padding: 1rem; /* p-4 */
+    border-radius: 0.5rem; /* rounded-lg */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* --- Station Card Styling --- */
+.station-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: rgba(34, 211, 238, 0.3); /* Subtle neon border on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(34, 211, 238, 0.1); /* Enhanced shadow + subtle glow */
+}
+
+/* Style for the currently playing station card */
+.playing {
+    border: 1px solid transparent; /* Base border - animation handles color */
+    animation: fadeIn 0.5s ease-out forwards, pulseNeonBorder 2s infinite ease-in-out;
+    transform: scale(1.03); /* Slightly larger when playing */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Keep hover shadow */
+}
+
+.playing img {
+    /* Add glow to playing favicon */
+     filter: drop-shadow(0 0 5px var(--neon-cyan));
+}
+
+/* --- Player Styling --- */
+#player {
+    background: rgba(17, 24, 39, 0.7); /* gray-900/70 */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 0.5rem; /* Slightly rounded top for sticky player */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent; /* Reset border, use glow class */
+}
+
+.player-favicon-glow {
+     border: 1px solid rgba(255,255,255,0.1);
+     box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+}
+
+.neon-audio-player {
+     border-radius: 0.375rem; /* rounded-md */
+     border: 1px solid var(--border-color);
+     height: 40px; /* Consistent height */
+     /* Basic filter to make controls look okay on dark theme */
+     filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.1);
+     background-color: #374151; /* Add bg color */
+     padding: 0 5px; /* Add padding */
+}
+
+/* --- Genre Tag Buttons --- */
+#genre-tags button {
+    background-color: #374151; /* gray-700 */
+    color: #d1d5db; /* gray-300 */
+    border: 1px solid #4b5563; /* gray-600 */
+    transition: all 0.2s ease-in-out;
+}
+
+#genre-tags button:hover {
+    background-color: var(--neon-pink);
+    color: var(--dark-bg);
+    border-color: var(--neon-pink);
+    transform: scale(1.05);
+    box-shadow: 0 0 8px var(--neon-pink), 0 0 12px var(--neon-pink);
+}
+
+/* --- Filter Styles --- */
+#search-filters input,
+#search-filters select {
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+#search-filters input:focus,
+#search-filters select:focus {
+     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* blue-500 focus ring */
+     border-color: #3b82f6; /* blue-500 */
+}
+
+/* --- Pagination Buttons --- */
+#pagination button {
+    background-color: #374151; /* gray-700 */
+    color: #d1d5db; /* gray-300 */
+    border: 1px solid #4b5563; /* gray-600 */
+    transition: all 0.2s ease-in-out;
+    padding: 0.25rem 0.75rem; /* Adjust padding */
+}
+
+#pagination button:hover:not([disabled]) {
+    background-color: var(--neon-cyan);
+    color: var(--dark-bg);
+    border-color: var(--neon-cyan);
+    transform: scale(1.05);
+    box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+#pagination button.bg-blue-500 { /* Currently active button */
+     background-color: var(--neon-cyan);
+     color: var(--dark-bg);
+     border-color: var(--neon-cyan);
+     box-shadow: 0 0 8px var(--neon-cyan);
+     cursor: default;
+     opacity: 0.8;
+}
+
+#pagination span {
+    color: var(--text-muted);
+}
+
+/* --- Misc --- */
+/* Style select dropdown arrows (basic) */
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Neon Glow Effects */
+.neon-text-glow-cyan {
+    text-shadow: 0 0 5px rgba(34, 211, 238, 0.5), 0 0 10px rgba(34, 211, 238, 0.4), 0 0 15px rgba(34, 211, 238, 0.3);
+}
+.neon-text-glow-pink {
+    text-shadow: 0 0 5px rgba(236, 72, 153, 0.5), 0 0 10px rgba(236, 72, 153, 0.4), 0 0 15px rgba(236, 72, 153, 0.3);
+}
+.neon-text-glow-purple {
+     text-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.4), 0 0 15px rgba(168, 85, 247, 0.3);
+}
+.neon-text-glow-header {
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.3), 0 0 12px rgba(236, 72, 153, 0.3), 0 0 16px rgba(168, 85, 247, 0.2);
+}
+
+.neon-button {
+    transition: all 0.3s ease;
+}
+.neon-button.neon-cyan {
+     box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), inset 0 0 5px rgba(34, 211, 238, 0.5);
+}
+.neon-button.neon-cyan:hover {
+     box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), inset 0 0 8px rgba(34, 211, 238, 0.7);
+}
+.neon-button.neon-pink {
+     box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink), inset 0 0 5px rgba(236, 72, 153, 0.5);
+}
+.neon-button.neon-pink:hover {
+     box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), inset 0 0 8px rgba(236, 72, 153, 0.7);
+}
+
+.neon-border-glow {
+    border: 1px solid rgba(55, 65, 81, 0.5); /* gray-700/50 */
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.2), 0 0 15px rgba(34, 211, 238, 0.1);
+}
+.neon-border-glow-cyan {
+     border: 1px solid rgba(34, 211, 238, 0.3);
+     box-shadow: 0 0 10px rgba(34, 211, 238, 0.3), 0 0 15px rgba(34, 211, 238, 0.2);
+}
+
+/* Focus Glow */
+.neon-input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2), 0 0 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Custom styles can be added here if needed */
+
+/* Hide scrollbar for filter lists */
+#genre-tags::-webkit-scrollbar,
+#flag-list::-webkit-scrollbar {
+    display: none;
+}
+#genre-tags,
+#flag-list {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* --- Flag Filters --- */
+#flag-list {
+    /* Flex behavior handled by Tailwind */
+    padding-bottom: 0.75rem; /* Add some padding for scrollbar area */
+}
+
+.flag-button {
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent; /* For selection border */
+}
+
+.flag-button .fi {
+    font-size: 2rem; /* Adjust flag size */
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    line-height: 1; /* Prevent extra space */
+    display: block; /* Ensure centering */
+    margin-bottom: 0.25rem; /* Space between flag and text */
+}
+
+.flag-button span.text-xs {
+    display: block; /* Ensure text wraps correctly if needed */
+}
+
+.flag-button.selected {
+    background-color: rgba(79, 70, 229, 0.2); /* indigo-700 with opacity */
+    border-color: var(--primary-color);
+} 

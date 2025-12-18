@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chandraवाणी - Web Radio Player</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Heroicons v2 -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/heroicons@2.1.3/24/outline/index.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/heroicons@2.1.3/24/solid/index.js"></script>
+    <!-- Or use the specific icons needed -->
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/heroicons@2.1.3/24/outline/magnifying-glass.js"></script> -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Flag Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.1/css/flag-icons.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Set base dark theme colors */
+            background-color: #111827; /* gray-900 */
+            color: #d1d5db; /* gray-300 */
+        }
+        /* Tailwind config override (optional, can also do via tailwind.config.js if not using CDN) */
+        /* tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                       sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        } */
+        /* Basic dark theme */
+        html, body {
+            height: 100%;
+        }
+        body {
+            background-color: #111827; /* gray-900 */
+            color: #d1d5db; /* gray-300 */
+            display: flex;
+            flex-direction: column;
+        }
+        /* Style for loading state */
+        .loading {
+            /* Add spinner or other indicator */
+            min-height: 100px; /* Ensure space */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading::after {
+            content: '';
+            width: 2rem;
+            height: 2rem;
+            border: 4px solid #4b5563; /* gray-600 */
+            border-top-color: #6366f1; /* indigo-500 */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Hide scrollbar for filter tags container */
+         #genre-tags::-webkit-scrollbar { display: none; }
+         #genre-tags { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="/* removed neon/subtle classes */ transition-colors duration-300 background-gradient antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 min-h-screen flex flex-col">
+        <header class="mb-6 md:mb-8 pb-4 pt-4 rounded-b-lg bg-gray-800/30 backdrop-blur-sm shadow-md border-b border-gray-700/50">
+            <!-- Logo -->
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-4 text-gray-100">
+                 <span class="text-teal-400">Chandra</span><span class="text-orange-400">वाणी</span>
+            </h1>
+            <!-- Navigation -->
+            <nav>
+                <ul class="flex justify-center space-x-4 sm:space-x-6 md:space-x-8 p-2">
+                    <li><a href="index.html" class="text-teal-400 hover:text-teal-300 font-medium pb-1 border-b-2 border-teal-400">Home</a></li>
+                    <li><a href="about.html" class="text-gray-300 hover:text-white font-medium pb-1 border-b-2 border-transparent hover:border-gray-300 transition duration-200">About Us</a></li>
+                    <li><a href="contact.html" class="text-gray-300 hover:text-white font-medium pb-1 border-b-2 border-transparent hover:border-gray-300 transition duration-200">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Error Message Area (Keep styling as is for errors) -->
+        <div id="error-container" class="mb-4 p-4 bg-red-900 border border-red-600 text-red-200 rounded hidden" role="alert">
+            <strong class="font-bold">Error:</strong>
+            <span id="error-message" class="block sm:inline">Something went wrong.</span>
+            <button id="close-error" class="absolute top-0 bottom-0 right-0 px-4 py-3 hidden">&times;</button>
+        </div>
+
+        <!-- Search and Filters -->
+         <section id="search-filters" class="mb-6 p-4 bg-gray-800/60 backdrop-blur-sm rounded-lg shadow-md border border-gray-700/60">
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                 <input type="text" id="search-input" placeholder="Search station name..." class="p-2 border border-gray-600 rounded bg-gray-700 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                <select id="genre-filter" class="p-2 border border-gray-600 rounded bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                     <option value="">Filter by Genre (Tag)</option>
+                 </select>
+                <select id="country-filter" class="p-2 border border-gray-600 rounded bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                     <option value="">Filter by Country</option>
+                 </select>
+                <select id="language-filter" class="p-2 border border-gray-600 rounded bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                     <option value="">Filter by Language</option>
+                 </select>
+             </div>
+            <div class="flex gap-4 mt-4">
+                 <button id="search-button" class="flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center gap-2">
+                     <heroicon-outline-magnifying-glass class="w-5 h-5"></heroicon-outline-magnifying-glass>
+                     <span>Search</span>
+                 </button>
+                  <button id="reset-button" class="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white font-semibold rounded shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center gap-2">
+                     <heroicon-outline-arrow-path class="w-5 h-5"></heroicon-outline-arrow-path>
+                     <span>Reset</span>
+                 </button>
+            </div>
+        </section>
+
+        <!-- This section should be moved -->
+        <section id="country-flag-filters" class="mb-6">
+            <h2 class="text-xl font-semibold mb-3 text-gray-200">Filter by Country</h2>
+            <div id="flag-list" class="flex space-x-3 overflow-x-auto pb-3">
+                <div class="loading w-full text-sm text-gray-400">Loading countries...</div>
+                <!-- Flag buttons will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Player -->
+         <section id="player" class="sticky top-0 z-50 mb-6 p-3 sm:p-4 bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 hidden border border-gray-700/50">
+             <div class="flex items-center space-x-3 w-full sm:w-auto">
+                 <img id="player-favicon" src="./placeholder-icon.svg" alt="Station Favicon" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover bg-gray-700 flex-shrink-0 border border-gray-600">
+                 <div class="overflow-hidden flex-grow">
+                     <div id="player-station-name" class="font-semibold text-base sm:text-lg text-gray-100 truncate flex items-center gap-2">
+                        <heroicon-solid-signal-slash class="w-5 h-5 text-gray-500 hidden"></heroicon-solid-signal-slash>
+                        <heroicon-solid-signal class="w-5 h-5 text-green-400 hidden player-playing-icon"></heroicon-solid-signal> <!-- Changed color -->
+                        <span id="player-station-name-text">No Station Playing</span>
+                    </div>
+                     <div id="player-station-info" class="text-xs sm:text-sm text-gray-400 truncate"></div>
+                 </div>
+             </div>
+             <audio id="audio-player" controls class="w-full sm:w-1/2 md:w-2/5 lg:w-1/3 audio-player-custom"></audio>
+        </section>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow">
+            <!-- Station List -->
+            <section id="station-list-section" class="mb-6">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-200 flex items-center gap-2">
+                    <heroicon-outline-list-bullet class="w-6 h-6 text-indigo-400"></heroicon-outline-list-bullet>
+                    <span>Stations</span>
+                </h2>
+                 <div id="station-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                    <!-- Station cards - styling via CSS -->
+                 </div>
+                 <div id="pagination" class="mt-6 flex justify-center items-center flex-wrap gap-2">
+                     <!-- Pagination buttons - styling via CSS -->
+                 </div>
+            </section>
+
+             <!-- Browse by Genre/Tag -->
+            <section id="genre-browse-section" class="mb-6">
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-200 flex items-center gap-2">
+                     <heroicon-outline-tag class="w-6 h-6 text-teal-400"></heroicon-outline-tag>
+                     <span>Browse by Genre</span>
+                 </h2>
+                 <div id="genre-tags" class="flex flex-wrap gap-2">
+                     <!-- Genre tags - styling via CSS -->
+                 </div>
+             </section>
+
+        <!-- Correct Placement for Mood Filters -->
+        <section id="mood-filters" class="mb-6">
+             <h2 class="text-xl font-semibold mb-3 text-gray-200 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 text-yellow-400"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm-3.53-7.47a.75.75 0 0 0 1.06 1.06L10 9.06l2.47 2.47a.75.75 0 1 0 1.06-1.06L11.06 8l2.47-2.47a.75.75 0 0 0-1.06-1.06L10 6.94 7.53 4.47a.75.75 0 0 0-1.06 1.06L8.94 8l-2.47 2.47a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" /></svg> <!-- Simple mood icon -->
+                  <span>Filter by Mood</span>
+             </h2>
+             <div id="mood-list" class="flex flex-wrap gap-2">
+                  <button data-mood="Chill" class="mood-button">Chill</button>
+                  <button data-mood="Workout" class="mood-button">Workout</button>
+                  <button data-mood="Focus" class="mood-button">Focus</button>
+                  <button data-mood="Party" class="mood-button">Party</button>
+                  <button data-mood="Ambient" class="mood-button">Ambient</button>
+                  <button data-mood="Sleep" class="mood-button">Sleep</button>
+             </div>
+         </section>
+
+         <!-- Top Clicked Stations -->
+         <section id="top-stations-section" class="mb-6">
+                 <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-200 flex items-center gap-2">
+                     <heroicon-outline-fire class="w-6 h-6 text-orange-400"></heroicon-outline-fire>
+                     <span>Top Stations</span>
+                 </h2>
+                <div id="top-stations-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                     <!-- Top station cards - styling via CSS -->
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center text-sm text-gray-500 py-6 mt-8 border-t border-gray-700/50">
+             <div>
+                 &copy; <span id="current-year"></span> Chandraवाणी. All rights reserved.
+             </div>
+         </footer>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Simple script to set the current year in the footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 
